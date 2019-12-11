@@ -14,11 +14,11 @@ import java.util.ArrayList;
 
 import ch.usi.tender.places.PlacesAPI;
 
-public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<String>> {
+public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<String>[]> {
 
 
     @Override
-    protected ArrayList<String> doInBackground(Location... locations) {
+    protected ArrayList<String>[] doInBackground(Location... locations) {
         try {
             return getPhotosReferences(locations[0]);
         } catch (MalformedURLException e) {
@@ -29,7 +29,7 @@ public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<Strin
         return null;
     }
 
-    private ArrayList<String> getPhotosReferences(Location location) throws IOException {
+    private ArrayList<String>[] getPhotosReferences(Location location) throws IOException {
         if(location == null) {
             return null;
         }
@@ -59,18 +59,23 @@ public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<Strin
         }
 
         String content = sb.toString();
-        String[] splitted = content.split("\"photo_reference\" : \"");
+        String[] refs = content.split("\"photo_reference\" : \"");
+        String[] nms = content.split("\"name\" : \"");
 
         ArrayList<String> references = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
 
-        for(int i = 1; i<splitted.length; i++){
-            String reference = splitted[i].split("\"")[0];
+        for(int i = 1; i<refs.length; i++){
+            String reference = refs[i].split("\"")[0];
+            String name = nms[i].split("\"")[0];
+
             references.add(reference);
+            names.add(name);
         }
 
         //TODO: REMOVE
         Log.d("Brian", content);
 
-        return references;
+        return new ArrayList[]{references, names};
     }
 }

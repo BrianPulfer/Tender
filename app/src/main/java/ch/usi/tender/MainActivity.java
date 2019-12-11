@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import ch.usi.tender.places.PlacesAPI;
 
@@ -81,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showNext(View view) {
+    public void dislike(View view) {
         placesAPI.showNext();
     }
+
+    public void like(View view){ Toast.makeText(this, placesAPI.getCurrentPhotoName(), Toast.LENGTH_SHORT).show();}
 }

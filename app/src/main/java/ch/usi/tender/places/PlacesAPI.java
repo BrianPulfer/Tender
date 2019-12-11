@@ -12,37 +12,44 @@ import ch.usi.tender.places.tasks.GetReferencesTask;
 
 public class PlacesAPI {
 
-    // public static final String API_KEY = "AIzaSyBGMkWa7FQ_G11Iabtzn3NsM23x2CYZ3ws";
-    public static final String API_KEY = "AIzaSyCTVC00X_jCbBWmW-9QFdd73caD8NnxSzA";
+    // public static final String API_KEY = "AIzaSyDsBrzeCuJU_rJFhGBZty_d_4WVleEK_5c";
+    //public static final String API_KEY = "AIzaSyCTVC00X_jCbBWmW-9QFdd73caD8NnxSzA";
+    public static final String API_KEY = "AIzaSyA7TgHqPLPBSvF-ZBIVc8HWf-EorXcgTiA";
 
     private ArrayList<String> currentReferences = new ArrayList<>();
+    private ArrayList<String> currentReferencesNames = new ArrayList<>();
     private ImageView view;
 
-    public PlacesAPI(ImageView view){
+    public PlacesAPI(ImageView view) {
         this.view = view;
     }
 
-    public void getPhotos(Location location){
+    public void getPhotos(Location location) {
         try {
             boolean notDisplayingDishes = (currentReferences.size() == 0);
-            currentReferences = new GetReferencesTask().execute(location).get();
+            ArrayList<String>[] refs = new GetReferencesTask().execute(location).get();
+
+            currentReferences = refs[0];
+            currentReferencesNames = refs[1];
 
             if (notDisplayingDishes)
-                    showNext();
+                showNext();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void showNext(){
+    public void showNext() {
         try {
             if (currentReferences.size() > 0) {
                 String urlString = "https://maps.googleapis.com/maps/api/place/photo?"
-                                    + "key="+PlacesAPI.API_KEY
-                                    + "&maxwidth=1000"
-                                    + "&photoreference="+currentReferences.get(0);
+                        + "key=" + PlacesAPI.API_KEY
+                        + "&maxwidth=1000"
+                        + "&photoreference=" + currentReferences.get(0);
+
                 currentReferences.remove(currentReferences.get(0));
+                currentReferencesNames.remove(currentReferencesNames.get(0));
 
 
                 Drawable newImage = new GetPhotoTask().execute(urlString).get();
@@ -51,8 +58,12 @@ public class PlacesAPI {
                 // TODO: Remove
                 Log.d("Brian", "Displaying next");
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getCurrentPhotoName() {
+        return this.currentReferencesNames.get(0);
     }
 }
