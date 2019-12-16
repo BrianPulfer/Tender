@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">Tender</string>
-    <string name="dish_description">Dish displayed to the user</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="tender">Tender</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="recently_visited">Recently Visited</string>
+    <string name="me">Me</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
     <string name="like_button">Like button</string>
     <string name="dislike_button">Dislike button</string>
 </resources>
