@@ -75,12 +75,12 @@ public class RecentlyVisitedFragment extends Fragment {
             setPreferredTextAttributes(text);
 
             WebView photo = new WebView(getContext());
-            setPreferredPhotoAttributes(photo, restaurantLat, restaurantLon);
+            setPreferredPhotoAttributes(photo);
             photo.loadUrl(URL);
 
             Button button = new Button(getContext());
             button.setText("Get there!");
-            setPreferredPhotoAttributes(button);
+            setPreferredPhotoAttributes(button, restaurantLat, restaurantLon);
 
             this.linearLayout.addView(text);
             this.linearLayout.addView(photo);
@@ -89,25 +89,11 @@ public class RecentlyVisitedFragment extends Fragment {
         }
     }
 
-    private void setPreferredPhotoAttributes(Button button) {
+    private void setPreferredPhotoAttributes(Button button, final String lat, final String lon) {
         button.setTextSize(16);
         button.setGravity(Gravity.CENTER);
-    }
 
-    private void setPreferredTextAttributes(TextView text) {
-        text.setTextSize(20);
-        text.setGravity(Gravity.CENTER);
-    }
-
-    private void setPreferredPhotoAttributes(WebView photo, final String lat, final String lon) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(PIC_WIDTH, PIC_WIDTH);
-        params.gravity = Gravity.CENTER;
-
-        photo.setInitialScale(100);
-        photo.setWebViewClient(new WebViewClient());
-
-        photo.setLayoutParams(params);
-        photo.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -118,5 +104,20 @@ public class RecentlyVisitedFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void setPreferredTextAttributes(TextView text) {
+        text.setTextSize(20);
+        text.setGravity(Gravity.CENTER);
+    }
+
+    private void setPreferredPhotoAttributes(WebView photo) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(PIC_WIDTH, PIC_WIDTH);
+        params.gravity = Gravity.CENTER;
+
+        photo.setInitialScale(100);
+        photo.setWebViewClient(new WebViewClient());
+
+        photo.setLayoutParams(params);
     }
 }

@@ -7,12 +7,14 @@ import android.net.Uri;
 import android.util.Log;
 import android.webkit.WebView;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import ch.usi.tender.places.tasks.GetReferencesTask;
 
 public class PlacesAPI {
 
-    // TODO: Insert your own Google Places API Key
+    //TODO: Put your own Google places API Key
     public static final String API_KEY = YOUR_API_KEY;
 
     private ArrayList<String> currentReferences = new ArrayList<>();
