@@ -12,7 +12,7 @@ import ch.usi.tender.places.tasks.GetReferencesTask;
 
 public class PlacesAPI {
 
-    // TODO: Put your own Google places API_KEY
+    // TODO: Insert your own Google Places API Key
     public static final String API_KEY = YOUR_API_KEY;
 
     private ArrayList<String> currentReferences = new ArrayList<>();
