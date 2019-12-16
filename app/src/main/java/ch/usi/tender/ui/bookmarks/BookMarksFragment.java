@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -77,9 +79,19 @@ public class BookMarksFragment extends Fragment {
             text.setText(restaurantName);
             setPreferredTextAttributes(text);
 
-            this.linearLayout.addView(photo);
+            Button button = new Button(getContext());
+            button.setText("Get there!");
+            setPreferredPhotoAttributes(button);
+
             this.linearLayout.addView(text);
+            this.linearLayout.addView(photo);
+            this.linearLayout.addView(button);
         }
+    }
+
+    private void setPreferredPhotoAttributes(Button button) {
+        button.setTextSize(16);
+        button.setGravity(Gravity.CENTER);
     }
 
     private void setPreferredTextAttributes(TextView text) {
@@ -91,7 +103,8 @@ public class BookMarksFragment extends Fragment {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(PIC_WIDTH, PIC_WIDTH);
         params.gravity = Gravity.CENTER;
 
-
+        photo.setInitialScale(100);
+        photo.setWebViewClient(new WebViewClient());
 
         photo.setLayoutParams(params);
         photo.setOnClickListener(new View.OnClickListener() {

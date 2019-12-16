@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,7 +37,12 @@ public class HomeFragment extends Fragment {
 
         // Sets the view to the main activity and starts the location tracking.
         Activity activity = getActivity();
-        ((MainActivity)activity).setPicture((WebView) root.findViewById(R.id.webview));
+
+        WebView view = (WebView) root.findViewById(R.id.webview);
+        view.setWebViewClient(new WebViewClient());
+        view.setInitialScale(100);
+
+        ((MainActivity)activity).setPicture(view);
 
         return root;
     }
