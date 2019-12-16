@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -32,8 +33,9 @@ public class HomeFragment extends Fragment {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Sets the view to the main activity and starts the location tracking.
         Activity activity = getActivity();
-        ((MainActivity)activity).setPicture((ImageView) root.findViewById(R.id.dishpic));
+        ((MainActivity)activity).setPicture((WebView) root.findViewById(R.id.webview));
 
         return root;
     }

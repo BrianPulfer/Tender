@@ -1,37 +1,45 @@
 package ch.usi.tender.places;
 
-import android.graphics.drawable.Drawable;
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.util.Log;
-import android.widget.ImageView;
+import android.webkit.WebView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-import ch.usi.tender.places.tasks.GetPhotoTask;
 import ch.usi.tender.places.tasks.GetReferencesTask;
 
 public class PlacesAPI {
 
-    public static final String API_KEY = "AIzaSyDsBrzeCuJU_rJFhGBZty_d_4WVleEK_5c";
-    //public static final String API_KEY = "AIzaSyCTVC00X_jCbBWmW-9QFdd73caD8NnxSzA";
-    //public static final String API_KEY = "AIzaSyA7TgHqPLPBSvF-ZBIVc8HWf-EorXcgTiA";
+    // TODO: Insert your own API KEY
+    public static final String API_KEY = YOUR_API_KEY;
 
     private ArrayList<String> currentReferences = new ArrayList<>();
     private ArrayList<String> currentReferencesNames = new ArrayList<>();
-    private ImageView view;
+    private ArrayList<String> currentLatLons = new ArrayList<>();
+    private WebView view;
 
-    public PlacesAPI(ImageView view){
+    private String currentPhotoName;
+    private String currentPhotoReference;
+    private String currentLatLon;
+
+    public PlacesAPI(WebView view){
         this.view = view;
     }
 
     public void getPhotos(Location location){
+        /**
+         * Given a location, this method fills the internal list of references links to pictures
+         * close to the given location. Also names and coordinates are retrieved.
+         * */
         try {
             boolean notDisplayingDishes = (currentReferences.size() == 0);
             ArrayList<String>[] refs = new GetReferencesTask().execute(location).get();
 
             currentReferences = refs[0];
             currentReferencesNames = refs[1];
+            currentLatLons = refs[2];
 
             if (notDisplayingDishes)
                 showNext();
@@ -42,9 +50,13 @@ public class PlacesAPI {
     }
 
     public void showNext(){
+        /**
+         * Updates the view to display the next image in the references list
+         * */
         try {
-            //TODO REMOVE
-            Log.d("Brian", "Current references: "+currentReferences.size());
+
+            // TODO: Remove
+            Log.d("Brian", "Left references: "+currentReferences.size());
 
             if (currentReferences.size() > 0) {
                 String urlString = "https://maps.googleapis.com/maps/api/place/photo?"
@@ -52,15 +64,18 @@ public class PlacesAPI {
                                     + "&maxwidth=1000"
                                     + "&photoreference="+currentReferences.get(0);
 
-                //TODO REMOVE
-                Log.d("Brian", "URL: "+urlString);
+                currentPhotoName = currentReferencesNames.get(0);
+                currentPhotoReference = currentReferences.get(0);
+                currentLatLon = currentLatLons.get(0);
 
-                currentReferences.remove(currentReferences.get(0));
-                currentReferencesNames.remove(currentReferencesNames.get(0));
+                currentReferencesNames.remove(currentPhotoName);
+                currentReferences.remove(currentPhotoReference);
+                currentLatLons.remove(currentLatLon);
 
+                view.loadUrl(urlString);
 
-                Drawable newImage = new GetPhotoTask().execute(urlString).get();
-                view.setImageDrawable(newImage);
+                // TODO: Remove
+                Log.d("Brian", "Getting photo at link: "+urlString);
             }
         } catch(Exception e){
             e.printStackTrace();
@@ -68,8 +83,30 @@ public class PlacesAPI {
     }
 
     public String getCurrentPhotoName(){
-        if (this.currentReferencesNames.size() > 0)
-            return this.currentReferencesNames.get(0);
-        return null;
+        return this.currentPhotoName;
+    }
+
+    public String getCurrentPhotoReference(){
+        return this.currentPhotoReference;
+    }
+
+    public String getCurrentLatLon(){return this.currentLatLon;}
+
+    public void startLocationIntent(Context context) {
+        /**
+         * Given a context, uses the context to start an implicit intent to access the location of
+         * the current picture
+         *
+         */
+
+        String lat = currentLatLon.split(" ")[0];
+        String lon = currentLatLon.split(" ")[1];
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("geo:"+lat+","+lon+"?z=20"));
+
+        if (intent.resolveActivity(context.getPackageManager()) != null){
+            context.startActivity(intent);
+        }
     }
 }

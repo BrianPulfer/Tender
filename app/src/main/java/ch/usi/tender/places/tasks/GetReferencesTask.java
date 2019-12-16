@@ -16,6 +16,11 @@ import ch.usi.tender.places.PlacesAPI;
 
 public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<String>[]> {
 
+    /**
+     * Class responsable for retrieving references to photos given a location.
+     * The photo references should point to photos that are close to the given locaiton.
+     */
+
 
     @Override
     protected ArrayList<String>[] doInBackground(Location... locations) {
@@ -30,6 +35,16 @@ public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<Strin
     }
 
     private ArrayList<String>[] getPhotosReferences(Location location) throws IOException {
+        /**
+         * Given the location, returns 3 ArrayLists of Strings:
+         *      The references to the photos
+         *      The names of the restaurants
+         *      The latitude and longitude under form of string
+         *
+         * The returned arrays are sorted such that the first element of each array refers to the
+         * first restaurant and so on.
+         */
+
         if(location == null) {
             return null;
         }
@@ -37,11 +52,12 @@ public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<Strin
         double lat = location.getLatitude();
         double lon = location.getLongitude();
 
+        // TODO: Consider changing 'types' to 'food'
         String requestURL =
                 "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
                         "location=" + lat + "," + lon +
                         "&radius=500" +
-                        "&types=food" +
+                        "&types=restaurant" +
                         "&key=" + PlacesAPI.API_KEY;
 
 
@@ -61,21 +77,32 @@ public class GetReferencesTask extends AsyncTask<Location, Void, ArrayList<Strin
         String content = sb.toString();
         String[] refs = content.split("\"photo_reference\" : \"");
         String[] nms = content.split("\"name\" : \"");
+        String[] lats = content.split("\"lat\" : ");
+        String[] lons = content.split("\"lng\" : ");
+
+        // TODO: REMOVE
+        Log.d("Brian", "Photo references: "+ (refs.length-1) + ". Names:: "+(nms.length-1));
 
         ArrayList<String> references = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
+        ArrayList<String> latLons = new ArrayList<>();
 
-        for(int i = 1; i<refs.length; i++){
+        for(int i = 1; i<refs.length-1; i++){
+            String latitude = lats[3*(i) + 1].split(",")[0];
+            String longitude = lons[3*(i) + 1].split(" ")[0];
+
             String reference = refs[i].split("\"")[0];
             String name = nms[i].split("\"")[0];
+            String latLon = latitude+" "+longitude;
 
             references.add(reference);
             names.add(name);
+            latLons.add(latLon);
         }
 
         //TODO: REMOVE
         Log.d("Brian", content);
 
-        return new ArrayList[]{references, names};
+        return new ArrayList[]{references, names, latLons};
     }
 }
