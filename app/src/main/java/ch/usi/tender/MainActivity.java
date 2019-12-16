@@ -73,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         initDatabase();
-        deleteAll();
-        initDatabase();
     }
 
     public PlacesAPI getPlacesAPI(){
