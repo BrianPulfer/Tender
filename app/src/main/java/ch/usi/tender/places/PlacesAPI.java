@@ -12,7 +12,7 @@ import ch.usi.tender.places.tasks.GetReferencesTask;
 
 public class PlacesAPI {
 
-    // TODO: Insert your own API KEY
+    // TODO: Put your own Google places API_KEY
     public static final String API_KEY = YOUR_API_KEY;
 
     private ArrayList<String> currentReferences = new ArrayList<>();
@@ -73,6 +73,7 @@ public class PlacesAPI {
                 currentLatLons.remove(currentLatLon);
 
                 view.loadUrl(urlString);
+                view.setInitialScale(100);
 
                 // TODO: Remove
                 Log.d("Brian", "Getting photo at link: "+urlString);
