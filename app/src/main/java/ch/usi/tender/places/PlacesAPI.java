@@ -14,7 +14,7 @@ import ch.usi.tender.places.tasks.GetReferencesTask;
 
 public class PlacesAPI {
 
-    //TODO: Put your own Google places API Key
+    // TODO: Insert your own Google places photos API key
     public static final String API_KEY = YOUR_API_KEY;
 
     private ArrayList<String> currentReferences = new ArrayList<>();
@@ -36,15 +36,12 @@ public class PlacesAPI {
          * close to the given location. Also names and coordinates are retrieved.
          * */
         try {
-            boolean notDisplayingDishes = (currentReferences.size() == 0);
+
             ArrayList<String>[] refs = new GetReferencesTask().execute(location).get();
 
             currentReferences = refs[0];
             currentReferencesNames = refs[1];
             currentLatLons = refs[2];
-
-            if (notDisplayingDishes)
-                showNext();
 
         } catch (Exception e) {
             e.printStackTrace();

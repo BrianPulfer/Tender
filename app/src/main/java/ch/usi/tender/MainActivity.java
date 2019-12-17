@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SQLiteDatabase db;
 
-    private boolean pictureInitialized = false;
+    private boolean apiInitialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        initDatabase();
+        deleteAll();
         initDatabase();
     }
 
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
          * in the passed view.
          * */
 
-        if (!pictureInitialized) {
+        if (!apiInitialized) {
             this.currentPicture = view;
             this.placesAPI = new PlacesAPI(currentPicture);
 
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onLocationChanged(Location location) {
                     placesAPI.getPhotos(location);
+                    placesAPI.showNext();
                 }
 
                 @Override
@@ -157,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
             };
             checkPermission();
 
-            pictureInitialized = true;
+            //apiInitialized = true;
         }
     }
 
@@ -223,6 +226,8 @@ public class MainActivity extends AppCompatActivity {
             insertVisit(placesAPI.getCurrentPhotoName(), placesAPI.getCurrentPhotoReference(), placesAPI.getCurrentLatLon());
             insertLike(placesAPI.getCurrentPhotoName(), placesAPI.getCurrentPhotoReference(), placesAPI.getCurrentLatLon());
         }
+
+        placesAPI.showNext();
     }
 
     public void goToRestaurant(View view){
